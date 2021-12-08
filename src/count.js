@@ -24,6 +24,26 @@ export default function Count() {
         style={{ padding: "4px 8px" }}
       >
         Click
+      </button>{" "}
+      <button
+        onClick={() => {
+          //   console.log(`state`, state);
+          dispatch({ type: "saga" });
+        }}
+        style={{ padding: "4px 8px" }}
+      >
+        Click1
+      </button>{" "}
+      <button
+        onClick={() => {
+          //   console.log(`state`, state);
+          dispatch({ type: "saga" });
+
+          dispatch({ type: "saga2" });
+        }}
+        style={{ padding: "4px 8px" }}
+      >
+        Click2saga1
       </button>
     </div>
   );
