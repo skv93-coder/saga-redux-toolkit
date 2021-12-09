@@ -24,30 +24,33 @@ function* worker1() {
   console.log(`'object'`, "object");
 }
 
-function* user1() {
+function* watcher1() {
   yield takeEvery("saga", worker1);
 }
-function* worker2() {
+function* worker2({ payload: { resolve } }) {
   console.log(`isFailing`, isFailing);
   yield call(delay, 10, isFailing);
-  console.log(`'object3'`, "object");
+  console.log(`'object3'`, "object", resolve);
+  resolve(6526512566);
+  return 9;
 }
 
-function* user2() {
-  yield takeEvery("saga2", worker2);
+function* watcher2() {
+  const res = yield takeEvery("saga2", worker2);
+  console.log(`res`, res);
 }
 
 // export default function* rootSaga() {
 //   // const sagas = [user];
 //   // console.log(`'run'`, "run");
-//   yield all([user1(), user2()]);
+//   yield all([watcher1(), watcher2()]);
 // }
 export default function* rootSaga() {
-  const sagas = [user1, user2];
+  const sagas = [watcher1, watcher2];
   // console.log(`'run'`, "run");
-  // yield all([user1(), user2()]);
-  // yield spawn(user1);
-  // yield spawn(user2);
+  // yield all([watcher1(), watcher2()]);
+  // yield spawn(watcher1);
+  // yield spawn(watcher2);
   yield all(
     sagas.map((saga) =>
       spawn(function* () {
@@ -57,7 +60,7 @@ export default function* rootSaga() {
             yield call(saga);
             break;
           } catch (e) {
-            console.log({ e });
+            console.log({ e }, 11);
           }
         }
       })
